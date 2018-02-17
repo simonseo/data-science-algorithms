@@ -1,0 +1,6 @@
+#Usage: bigram_count inputfile
+
+spark-submit --master local bigramcount.py $1 2>tmpfile
+
+#On Yarn use the line below
+#spark-submit --master yarn bigramcount.py $1 2>tmpfile
