@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*- 
 # @File Name: LogCounter.py
 # @Created:   2018-02-21 04:30:16  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 04:54:41  Simon Seo (simon.seo@nyu.edu)
+# @Updated:   2018-02-21 21:54:25  Simon Seo (simon.seo@nyu.edu)
 import math
+from datetime import datetime
+import traceback
 
 class LogCounter():
 	"""counts in exponential unit"""
@@ -18,19 +20,25 @@ class LogCounter():
 			self.log = lambda x: math.log(x, base)
 		self.count = 0
 		self.logcount = 0
+		self.startingTime = datetime.now()
 
 	def __enter__(self):
+		print("Started at {}".format(self.startingTime))
 		return self
 
 	def __exit__(self, exc_type, exc_value, exc_traceback):
 		if exc_value == None:
-			print("Successful loop. Count: {}".format(self.count))
+			print("Loop Successful. Count: {}".format(self.count))
 		else:
 			print("Loop failed.")
+			traceback.print_exception(exc_type, exc_value, exc_traceback)
+		print("Ended at {} Total Time {}".format(datetime.now(), datetime.now() - self.startingTime))
 		return True
 
 	def increment(self, msg=""):
 		self.count += 1
-		if self.log(self.count) == self.logcount:
+		if self.log(self.count) >= self.logcount:
 			self.logcount += 1
-			print(self.count, msg)
+			print("Time elapsed: {2}  Count: {0}  {1}".format(self.count, msg, datetime.now() - self.startingTime))
+
+

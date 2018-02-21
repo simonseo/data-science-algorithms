@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- 
 # @File Name: preAnalysis.py
 # @Created:   2018-02-21 00:41:31  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 03:51:30  Simon Seo (simon.seo@nyu.edu)
+# @Updated:   2018-02-21 22:58:00  Simon Seo (simon.seo@nyu.edu)
 
 import matplotlib.pyplot as plt
 import math
@@ -86,5 +86,5 @@ if __name__ == '__main__':
 	# rb = rbCandidates(p=.85, s=s, rrange=range(1, 10), brange=range(1, 20))
 	# rbAnalysis(rb=rb, S=s)
 
-	createRandomVectors(16, len(midSet))
+	createRandomVectors(44, len(midSet))
 
