@@ -2,48 +2,15 @@
 # -*- coding: utf-8 -*- 
 # @File Name: preAnalysis.py
 # @Created:   2018-02-21 00:41:31  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 03:07:36  Simon Seo (simon.seo@nyu.edu)
-import string
+# @Updated:   2018-02-21 03:51:30  Simon Seo (simon.seo@nyu.edu)
+
 import matplotlib.pyplot as plt
-from functools import reduce
 import math
-
-def getWords(line):
-	words = line.strip().lower().split(',')
-	return list( map(lambda w: w.strip(string.punctuation), words) )
-
-def cosd(u, v):
-	'''cosine distance function
-	u, v = user entries from userDict
-	m = length of user/random vector'''
-	midSet = set(u.keys()) & set(v.keys())
-	dotproduct = 0
-	for mid in midSet:
-		dotproduct += u.get(mid, None) * v.get(mid, None)
-	square = lambda x: x**2
-	add = lambda x, y: x + y
-	mag = reduce(add, map(square, u.values())) * reduce(add, map(square, v.values())) #|u|*|v|
-	mag **= 1/2
-	assert mag != 0
-	return math.acos(dotproduct/mag)
-
-def createUserDict(filename="ratings.csv"):
-	userDict = {}
-	midSet = set([])
-
-	with open(filename, "r") as infile:
-		lst = list(map(getWords, infile.read().splitlines()))
-		lst = list(map(lambda t: (int(t[0]), (int(t[1]), float(t[2]))), lst)) #(uid, (mid, r))
-
-	for rating in lst:
-		(uid, (mid, r)) = rating
-		midSet.add(mid)
-		user = userDict.get(uid, {})
-		user[mid] = r
-		userDict[uid] = user
-	return userDict, midSet
+from random import gauss
+from functions import cosd, createUserDict
 
 def cosDistanceHistogram(userDict):
+	'''computes cosine distance for given sample of users and draws histogram'''
 	cosds = []
 	for u in userDict.values():
 		for v in userDict.values():
@@ -97,15 +64,27 @@ def rbAnalysis(rb=[(4,32), (8,16), (8,32), (4,8), (4,4), (2,8), (8,12), (12,8), 
 			else:
 				falseNegativeRate += intervalSize * (1-fx(s,r,b)) / (1-S)
 
-		print("r={} b={} |  threshold={}  p({})={:.4f}  false-pos={:.4f}  false-neg={:.4f}"\
+		print("r={} b={} |  threshold={}  p({:.4f})={:.4f}  false-pos={:.4f}  false-neg={:.4f}"\
 			.format(r, b, max_slope_threshold[0], S, fx(S, r, b), falsePositiveRate, falseNegativeRate))
+
+def createRandomVectors(k, m, filename="randomVectors.csv"):
+	'''creates k random vectors in m dimensions'''
+	with open(filename, "w") as outfile:
+		for i in range(k):
+			for j in range(m):
+				outfile.write("{:.8f} ".format(gauss(0,1)))
+			outfile.write('\n')
+
+
 
 
 if __name__ == '__main__':
 	userDict, midSet = createUserDict()
-	cosds = cosDistanceHistogram(userDict)
-	rb = rbCandidates(p=.85, s=.43, rrange=range(1, 10), brange=range(1, 20))
-	rbAnalysis(rb=rb, S=.43)
+	# cosds = cosDistanceHistogram(userDict)
 
+	# s = 1-1.15/math.pi #p(placed in same bucket if cosd=1.15)
+	# rb = rbCandidates(p=.85, s=s, rrange=range(1, 10), brange=range(1, 20))
+	# rbAnalysis(rb=rb, S=s)
 
+	createRandomVectors(16, len(midSet))
 
