@@ -2,25 +2,12 @@
 # -*- coding: utf-8 -*- 
 # @File Name: main.py
 # @Created:   2018-02-21 03:21:35  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 23:08:48  Simon Seo (simon.seo@nyu.edu)
-from functions import createUserDict, cosd, choose
+# @Updated:   2018-02-21 23:44:03  Simon Seo (simon.seo@nyu.edu)
+from functions import createUserDict, cosd, choose, dot
 from LogCounter import LogCounter
 import math
 from functools import reduce
-
-def dot(userVector, vec, mids):
-	'''userVector is a sparse vector (dictionary) of (mid,r) entries
-	vec is a dense vector that has all m components(list of floats)'''
-	product = 0
-	for mid, r in userVector.items():
-		try:
-			i = mids.index(mid)
-		except ValueError as e:
-			print("mids length {} mid {}".format(len(mids), mid))
-			raise e
-		product += r * vec[i]
-	return product
-
+import matplotlib.pyplot as plt
 
 # open randomVectors and userDict
 userDict, mids = createUserDict("ratings.csv")

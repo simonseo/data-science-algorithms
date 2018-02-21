@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- 
 # @File Name: preAnalysis.py
 # @Created:   2018-02-21 00:41:31  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 22:58:00  Simon Seo (simon.seo@nyu.edu)
+# @Updated:   2018-02-21 23:44:05  Simon Seo (simon.seo@nyu.edu)
 
 import matplotlib.pyplot as plt
 import math
@@ -74,8 +74,6 @@ def createRandomVectors(k, m, filename="randomVectors.csv"):
 			for j in range(m):
 				outfile.write("{:.8f} ".format(gauss(0,1)))
 			outfile.write('\n')
-
-
 
 
 if __name__ == '__main__':

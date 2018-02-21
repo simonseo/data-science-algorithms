@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- 
 # @File Name: functions.py
 # @Created:   2018-02-21 03:15:26  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 04:06:37  Simon Seo (simon.seo@nyu.edu)
+# @Updated:   2018-02-21 23:43:48  Simon Seo (simon.seo@nyu.edu)
 import string
 import math
 import itertools
@@ -46,5 +46,18 @@ def cosd(u, v):
 	return math.acos(dotproduct/mag)
 
 def choose(lst, r):
-    #returns all "choose r" combinations as a set
-    return set(map(lambda x: tuple(sorted(x)), itertools.combinations(lst, r)))
+	#returns all "choose r" combinations as a set
+	return set(map(lambda x: tuple(sorted(x)), itertools.combinations(lst, r)))
+
+def dot(userVector, vec, mids):
+	'''userVector is a sparse vector (dictionary) of (mid,r) entries
+	vec is a dense vector that has all m components(list of floats)'''
+	product = 0
+	for mid, r in userVector.items():
+		try:
+			i = mids.index(mid)
+		except ValueError as e:
+			print("mids length {} mid {}".format(len(mids), mid))
+			raise e
+		product += r * vec[i]
+	return product
