@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- 
 # @File Name: LogCounter.py
 # @Created:   2018-02-21 04:30:16  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 21:54:25  Simon Seo (simon.seo@nyu.edu)
+# @Updated:   2018-02-25 20:53:34  Simon Seo (simon.seo@nyu.edu)
 import math
 from datetime import datetime
 import traceback
@@ -40,5 +40,4 @@ class LogCounter():
 		if self.log(self.count) >= self.logcount:
 			self.logcount += 1
 			print("Time elapsed: {2}  Count: {0}  {1}".format(self.count, msg, datetime.now() - self.startingTime))
-
 

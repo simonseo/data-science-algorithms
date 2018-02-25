@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*- 
 # @File Name: preAnalysis.py
 # @Created:   2018-02-21 00:41:31  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-21 23:44:05  Simon Seo (simon.seo@nyu.edu)
-
+# @Updated:   2018-02-25 20:56:30  Simon Seo (simon.seo@nyu.edu)
 import matplotlib.pyplot as plt
 import math
 from random import gauss
@@ -11,17 +10,17 @@ from functions import cosd, createUserDict
 
 def cosDistanceHistogram(userDict):
 	'''computes cosine distance for given sample of users and draws histogram'''
-	cosds = []
-	for u in userDict.values():
-		for v in userDict.values():
-			if u != v:
-				cosds.append(cosd(u,v))
+	ijcosds = []
+	for i, u in userDict.items():
+		for j, v in userDict.items():
+			if i < j:
+				ijcosds.append(((i,j), cosd(u,v)))
 
 	plt.subplot()
-	plt.hist(cosds, 'auto')
+	plt.hist(list(map(lambda x:x[1], ijcosds)), 'auto')
 	plt.show()
 
-	return cosds
+	return ijcosds
 
 def rbCandidates(p=.98, s=.43, rrange=range(2, 20), brange=range(1, 20)):
 	# Finds (b,r) parameters required for documents of 
@@ -64,7 +63,7 @@ def rbAnalysis(rb=[(4,32), (8,16), (8,32), (4,8), (4,4), (2,8), (8,12), (12,8), 
 			else:
 				falseNegativeRate += intervalSize * (1-fx(s,r,b)) / (1-S)
 
-		print("r={} b={} |  threshold={}  p({:.4f})={:.4f}  false-pos={:.4f}  false-neg={:.4f}"\
+		print("r={} b={}  \t|  threshold={} \t p({:.4f})={:.4f} \t false-pos={:.4f} \t false-neg={:.4f}"\
 			.format(r, b, max_slope_threshold[0], S, fx(S, r, b), falsePositiveRate, falseNegativeRate))
 
 def createRandomVectors(k, m, filename="randomVectors.csv"):
@@ -75,14 +74,27 @@ def createRandomVectors(k, m, filename="randomVectors.csv"):
 				outfile.write("{:.8f} ".format(gauss(0,1)))
 			outfile.write('\n')
 
+def dot(userVector, vec, mids):
+	'''userVector is a sparse vector (dictionary) of (mid,r) entries
+	vec is a dense vector that has all m components(list of floats)'''
+	product = 0
+	for mid, r in userVector.items():
+		try:
+			i = mids.index(mid)
+		except ValueError as e:
+			print("mids length {} mid {}".format(len(mids), mid))
+			raise e
+		product += r * vec[i]
+	return product
 
 if __name__ == '__main__':
 	userDict, midSet = createUserDict()
-	# cosds = cosDistanceHistogram(userDict)
+	cosds = cosDistanceHistogram(userDict)
 
-	# s = 1-1.15/math.pi #p(placed in same bucket if cosd=1.15)
-	# rb = rbCandidates(p=.85, s=s, rrange=range(1, 10), brange=range(1, 20))
-	# rbAnalysis(rb=rb, S=s)
+	targetCosd = math.pi/4
+	s = 1-(targetCosd)/math.pi # Pr(placed in same bucket if cosd=pi/4)
+	rb = rbCandidates(p=.99, s=s, rrange=range(1, 10), brange=range(1, 20))
+	rbAnalysis(rb=rb, S=s)
 
 	createRandomVectors(44, len(midSet))
 
