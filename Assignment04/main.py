@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- 
 # @File Name: main.py
 # @Created:   2018-02-21 03:21:35  Simon Myunggun Seo (simon.seo@nyu.edu) 
-# @Updated:   2018-02-25 20:59:41  Simon Seo (simon.seo@nyu.edu)
+# @Updated:   2018-04-02 00:33:07  Simon Seo (simon.seo@nyu.edu)
 from functions import createUserDict, cosd, choose, dot
 from LogCounter import LogCounter
 import math
@@ -66,17 +66,17 @@ with LogCounter(base=16) as lc:
 			resultCosds.append(d)
 
 
-plt.subplot()
-plt.ylim(ymax=50)
-binlist=[i/200 for i in range(312)]
-plt.hist(candidateCosds, bins=binlist)
-plt.hist(resultCosds, bins=binlist)
-plt.show()
+# plt.subplot()
+# plt.ylim(ymax=50)
+# binlist=[i/200 for i in range(312)]
+# plt.hist(candidateCosds, bins=binlist)
+# plt.hist(resultCosds, bins=binlist)
+# plt.show()
 
 
-print("candidates:{} finalists:{} total possible pairs:{}".format(len(candidateCosds), len(resultCosds), len(ijcosds)))
-for i, val in enumerate(sorted(ijcosds, key=lambda x:x[1])):
+print("candidates:{} finalists:{} total possible pairs:{}".format(len(candidateCosds), len(resultCosds), len(resultijCosds)))
+for i, val in enumerate(sorted(resultijCosds, key=lambda x:x[1])):
     if val[1] > (1-s)*math.pi:
         print("there shold actually be {} finalists".format(i))
         break
-print(sorted(ijcosds, key=lambda x:x[1])[:i+10])
+print(sorted(resultijCosds, key=lambda x:x[1])[:i+10])
