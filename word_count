@@ -1,0 +1,6 @@
+#Usage: word_count inputfile
+
+spark-submit --master local wordcount.py $1 2>tmpfile
+
+#On Yarn use the line below
+#spark-submit --master yarn wordcount.py $1 2>tmpfile
